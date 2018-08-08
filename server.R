@@ -31,17 +31,56 @@ function(input, output) {
     x
   }
   read_excel_selectedSheet <- function(filename) {
-    age <- input$age
-    x <-    lapply(sheets, function(X) readxl::read_excel(filename, sheet = age))
+    sheets <- input$age
+    x <-   readxl::read_excel(filename, sheet = sheets)
+    
   }
   #show table button interaction
   observeEvent(input$show, {
     showModal(modalDialog(
-      title = "Influenza Data"
-      
+      title = "Influenza Data",
+      dataTableOutput("mytable")
     ))
   })
   #Datatable
+  output$mytable <- renderDataTable({
+    age <-input$age
+    region <- input$region
+    month <- input$month
+    years <- input$years
+    inFile <- input$file
+    if(is.null(inFile)){
+      return(NULL)
+    }
+    if(is.null(age)){
+      #readtable
+      return(NULL)
+     
+    }else{
+      file.rename(inFile$datapath,paste(inFile$datapath, ".xls", sep=""))
+       table <- read_excel_selectedSheet(paste(inFile$datapath, ".xls", sep=""))
+      if(!is.null(region)){
+       tablexl <- table %>%  select(MONTH, YEAR, region)
+        if(!is.null(years)){
+          if(!is.null(month)){
+            tablexl <- filter(table, MONTH == month && YEAR == years)
+          }else{
+            tablexl <- filter(table, YEAR == years)
+          }
+        }else{
+          if(!is.null(month)){
+            tablexl <- filter(table, MONTH == month)
+          }
+        }
+       
+      }
+      
+      
+    }
+   
+      
+   
+  })
   
   
 }
