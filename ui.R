@@ -55,12 +55,44 @@ navbarPage("Epipoi", id="nav",
                                       checkboxInput(inputId = "filters",
                                                     label = strong("Filters"),
                                                     value = FALSE),
-                                      
+                                      checkboxInput(inputId = "compareFilters",
+                                                    label = strong("Compare 2 range of ages"),
+                                                    value = FALSE),
                                       
                                       conditionalPanel(condition = "input.filters == true",
                                                        # Download country mappings
                                                        h4("Filters:"),
                                                        selectInput("age","Age", c("All ages"="", "less 1 year" = "less 1 year","01-04" = "01-04","05-09" = "05-09","10-14" = "10-14","15-19" = "15-19","20-29" = "20-29",
+                                                                                  "30-39" = "30-39","40-49" = "40-49","50-59" = "50-59","60-69" = "60-69","70-79" = "70-79","80 and plus" = "80 and plus"), multiple=FALSE),
+                                                       selectInput("month","Month", c("All months"="", "January" = "1","February" = "2","March" = "3","April" = "4","May" = "5","June" = "6",
+                                                                                      "July" = "7","August" = "8","September" = "9","October" = "10","November" = "11","December" = "12"), multiple=TRUE),
+                                                       
+                                                       selectInput("years","Years", c("All years"="", "2000"="2000","2001"="2001","2002"="2002","2003"="2003","2004"="2004","2005"="2005",
+                                                                                      "2006"="2006","2007"="2007","2008"="2008","2009"="2009","2010"="2010","2011"="2011","2012"="2012","2013"="2013"), multiple=TRUE),
+                                                       selectInput("region","Region", c("All region"="", "RIO GRANDE DO SUL" = "RIO GRANDE DO SUL","SANTA CATARINA" = "SANTA CATARINA","PARANÁ" = "PARANÁ","SÃO PAULO" = "SÃO PAULO",
+                                                                                        "RIO DE JANEIRO" = "RIO DE JANEIRO","ESPÍRITO SANTO" = "ESPÍRITO SANTO","MINAS GERAIS" = "MINAS GERAIS","MATO GROSSO DO SUL" = "MATO GROSSO DO SUL",
+                                                                                        "GOIÁS" = "GOIÁS","DISTRITO FEDERAL" = "DISTRITO FEDERAL","MATO GROSSO" = "MATO GROSSO","BAHIA" = "BAHIA","SERGIPE"="SERGIPE","ALAGOAS"="ALAGOAS",
+                                                                                        "PERNAMBUCO"="PERNAMBUCO","PARAÍBA"="PARAÍBA","RIO GRANDE DO NORTE"="RIO GRANDE DO NORTE","PIAUÍ"="PIAUÍ","CEARÁ"="CEARÁ","MARANHÃO"="MARANHÃO",
+                                                                                        "TOCANTINS"="TOCANTINS","ACRE"="ACRE","RONDÔNIA"="RONDÔNIA","AMAZONAS"="AMAZONAS","PARÁ"="PARÁ","AMAPÁ"="AMAPÁ","RORAIMA"="RORAIMA"), multiple=TRUE),
+                                                       checkboxInput(inputId = "compareHist1",
+                                                                     label = strong("temporal"),
+                                                                     value = FALSE),
+                                                       conditionalPanel(condition = "input.compareHist1 == true",
+                                                                        # Download country mappings
+                                                                        absolutePanel(id = "Histogram1", class = "panel panel-default", fixed = TRUE,
+                                                                                      draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,
+                                                                                      width = 600, height = "auto",
+                                                                                      h4("Filters:")
+                                                                        )),
+                                                       actionButton("show", "Show Data Table")
+                                                       ),
+                                                      conditionalPanel(condition = "input.compareFilters == true",
+                                                       # Download country mappings
+                                                       h4("Filters:"),
+                                                       selectInput("age1","Age 1", c("All ages"="", "less 1 year" = "less 1 year","01-04" = "01-04","05-09" = "05-09","10-14" = "10-14","15-19" = "15-19","20-29" = "20-29",
+                                                                                  "30-39" = "30-39","40-49" = "40-49","50-59" = "50-59","60-69" = "60-69","70-79" = "70-79","80 and plus" = "80 and plus"), multiple=TRUE),
+                                                       
+                                                       selectInput("age2","Age 2", c("All ages"="", "less 1 year" = "less 1 year","01-04" = "01-04","05-09" = "05-09","10-14" = "10-14","15-19" = "15-19","20-29" = "20-29",
                                                                                   "30-39" = "30-39","40-49" = "40-49","50-59" = "50-59","60-69" = "60-69","70-79" = "70-79","80 and plus" = "80 and plus"), multiple=TRUE),
                                                        selectInput("month","Month", c("All months"="", "January" = "1","February" = "2","March" = "3","April" = "4","May" = "5","June" = "6",
                                                                                       "July" = "7","August" = "8","September" = "9","October" = "10","November" = "11","December" = "12"), multiple=TRUE),
@@ -71,9 +103,24 @@ navbarPage("Epipoi", id="nav",
                                                                                         "RIO DE JANEIRO" = "RIO DE JANEIRO","ESPÍRITO SANTO" = "ESPÍRITO SANTO","MINAS GERAIS" = "MINAS GERAIS","MATO GROSSO DO SUL" = "MATO GROSSO DO SUL",
                                                                                         "GOIÁS" = "GOIÁS","DISTRITO FEDERAL" = "DISTRITO FEDERAL","MATO GROSSO" = "MATO GROSSO","BAHIA" = "BAHIA","SERGIPE"="SERGIPE","ALAGOAS"="ALAGOAS",
                                                                                         "PERNAMBUCO"="PERNAMBUCO","PARAÍBA"="PARAÍBA","RIO GRANDE DO NORTE"="RIO GRANDE DO NORTE","PIAUÍ"="PIAUÍ","CEARÁ"="CEARÁ","MARANHÃO"="MARANHÃO",
-                                                                                        "TOCANTINS"="TOCANTINS","ACRE"="ACRE","RONDÔNIA"="RONDÔNIA","AMAZONAS"="AMAZONAS","PARÁ"="PARÁ","AMAPÁ"="AMAPÁ","RORAIMA"="RORAIMA"), multiple=TRUE)
-                                      ),
-                                      actionButton("show", "Show Data Table")
+                                                                                        "TOCANTINS"="TOCANTINS","ACRE"="ACRE","RONDÔNIA"="RONDÔNIA","AMAZONAS"="AMAZONAS","PARÁ"="PARÁ","AMAPÁ"="AMAPÁ","RORAIMA"="RORAIMA"), multiple=TRUE),
+                                                       actionButton("show2", "Show Data Table"),
+                                                       checkboxInput(inputId = "compareHist",
+                                                                     label = strong("temporal"),
+                                                                     value = FALSE),
+                                                       conditionalPanel(condition = "input.compareHist == true",
+                                                                        # Download country mappings
+                                                                        absolutePanel(id = "Histogram", class = "panel panel-default", fixed = TRUE,
+                                                                                      draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,
+                                                                                      width = 600, height = "auto",
+                                                                        h4("Filters:")
+                                                                        )
+                                                                       
+                                                       
+                                                       )
+                                                       )
+                                      
+                                      
                         )
                     )
            )
