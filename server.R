@@ -19,7 +19,7 @@ function(input, output) {
         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%
-      setView(lng = -93.85, lat = 37.45, zoom = 3)
+      setView(lng = -93.85, lat = 37.45, zoom = 2)
     
   })
   
