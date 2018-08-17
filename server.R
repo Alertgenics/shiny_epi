@@ -7,19 +7,45 @@
 
 
 library(shiny)
+#library(leaflet)
+#library(tidyverse)
 
 function(input, output) {
   
   ## Interactive Map ###########################################
+
   
   # Create the map
   output$map <- renderLeaflet({
+    pais <- input$country
+    if(!is.null(pais)){
+      if(pais == ""){
+        leaflet() %>%
+          addTiles(
+            urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+            attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+          ) %>%
+          setView(lng = -93.85, lat = 37.45, zoom = 2)
+      }else{
+      countries <- read_excel("data/countries.xls",col_names = TRUE)
+      lati <- countries$Latitude[countries$Country == pais]
+      long <- countries$Longitude[countries$Country == pais]
     leaflet() %>%
       addTiles(
         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%
-      setView(lng = -93.85, lat = 37.45, zoom = 2)
+      setView(lng = long, lat = lati, zoom = 5)
+      }
+    }else{
+      
+      leaflet() %>%
+        addTiles(
+          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+        ) %>%
+        setView(lng = -93.85, lat = 37.45, zoom = 2)
+    }
     
   })
   
@@ -45,7 +71,7 @@ function(input, output) {
   #Datatable
   output$mytable <- renderDataTable({
     age <-input$age
-    region <- input$region
+  #  region <- input$region
     month <- input$month
     years <- input$years
     inFile <- input$file
@@ -59,8 +85,8 @@ function(input, output) {
     }else{
       file.rename(inFile$datapath,paste(inFile$datapath, ".xls", sep=""))
        table <- read_excel_selectedSheet(paste(inFile$datapath, ".xls", sep=""))
-      if(!is.null(region)){
-       tablexl <- table %>%  select(MONTH, YEAR, region)
+      #if(!is.null(region)){
+      # tablexl <- table %>%  select(MONTH, YEAR, region)
         if(!is.null(years)){
           if(!is.null(month)){
             tablexl <- filter(table, MONTH == month && YEAR == years)
@@ -73,7 +99,7 @@ function(input, output) {
           }
         }
        
-      }
+      #}
       
       
     }

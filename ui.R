@@ -9,6 +9,7 @@ library(shiny)
 library(readxl)
 library(leaflet)
 library(ggmap)
+countries <- read_excel("data/countries.xls")
 
 
 navbarPage("Epipoi", id="nav",
@@ -69,11 +70,10 @@ navbarPage("Epipoi", id="nav",
                                                        
                                                        selectInput("years","Years", c("All years"="", "2000"="2000","2001"="2001","2002"="2002","2003"="2003","2004"="2004","2005"="2005",
                                                                                       "2006"="2006","2007"="2007","2008"="2008","2009"="2009","2010"="2010","2011"="2011","2012"="2012","2013"="2013"), multiple=TRUE),
-                                                       selectInput("region","Region", c("All region"="", "RIO GRANDE DO SUL" = "RIO GRANDE DO SUL","SANTA CATARINA" = "SANTA CATARINA","PARANÁ" = "PARANÁ","SÃO PAULO" = "SÃO PAULO",
-                                                                                        "RIO DE JANEIRO" = "RIO DE JANEIRO","ESPÍRITO SANTO" = "ESPÍRITO SANTO","MINAS GERAIS" = "MINAS GERAIS","MATO GROSSO DO SUL" = "MATO GROSSO DO SUL",
-                                                                                        "GOIÁS" = "GOIÁS","DISTRITO FEDERAL" = "DISTRITO FEDERAL","MATO GROSSO" = "MATO GROSSO","BAHIA" = "BAHIA","SERGIPE"="SERGIPE","ALAGOAS"="ALAGOAS",
-                                                                                        "PERNAMBUCO"="PERNAMBUCO","PARAÍBA"="PARAÍBA","RIO GRANDE DO NORTE"="RIO GRANDE DO NORTE","PIAUÍ"="PIAUÍ","CEARÁ"="CEARÁ","MARANHÃO"="MARANHÃO",
-                                                                                        "TOCANTINS"="TOCANTINS","ACRE"="ACRE","RONDÔNIA"="RONDÔNIA","AMAZONAS"="AMAZONAS","PARÁ"="PARÁ","AMAPÁ"="AMAPÁ","RORAIMA"="RORAIMA"), multiple=TRUE),
+                                                      # selectInput("regions","Regions", c("All region"="",structure(region, names=region)), multiple=TRUE),
+                                                       
+                                                       selectInput("country","Country", c("All region"="",structure(countries, names=countries)), multiple=FALSE),
+                                                       
                                                        checkboxInput(inputId = "compareHist1",
                                                                      label = strong("temporal"),
                                                                      value = FALSE),
