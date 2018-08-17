@@ -50,9 +50,6 @@ navbarPage("Epipoi", id="nav",
                                                 multiple = TRUE,
                                                 accept = c(".xls",".XLS", ".xlsx")),
                                       
-                                      #   selectInput("regions","Regions", c("All region"="",structure(region.name, names=region.name)), multiple=TRUE),
-                                      
-                                      #    selectInput("country","Country", c("All region"="",structure(countries.name, names=countries.name)), multiple=FALSE),
                                       checkboxInput(inputId = "filters",
                                                     label = strong("Filters"),
                                                     value = FALSE),
@@ -68,12 +65,12 @@ navbarPage("Epipoi", id="nav",
                                                        selectInput("month","Month", c("All months"="", "January" = "1","February" = "2","March" = "3","April" = "4","May" = "5","June" = "6",
                                                                                       "July" = "7","August" = "8","September" = "9","October" = "10","November" = "11","December" = "12"), multiple=TRUE),
                                                        
-                                                       selectInput("years","Years", c("All years"="", "2000"="2000","2001"="2001","2002"="2002","2003"="2003","2004"="2004","2005"="2005",
+                                                       selectInput("years","Years", c("All years"="","1998"="1998","1999"="1999", "2000"="2000","2001"="2001","2002"="2002","2003"="2003","2004"="2004","2005"="2005",
                                                                                       "2006"="2006","2007"="2007","2008"="2008","2009"="2009","2010"="2010","2011"="2011","2012"="2012","2013"="2013"), multiple=TRUE),
-                                                      # selectInput("regions","Regions", c("All region"="",structure(region, names=region)), multiple=TRUE),
-                                                       
-                                                       selectInput("country","Country", c("All region"="",structure(countries, names=countries)), multiple=FALSE),
-                                                       
+                                                       selectInput("country","Country", c("All countries"="",structure(countries$Country, names=countries$Country)), multiple=FALSE),
+                                                       #selectInput("regions","Regions", c("All regions"="",structure(region, names=region)), multiple=TRUE),
+                                                      
+                                                       htmlOutput("selector"),
                                                        checkboxInput(inputId = "compareHist1",
                                                                      label = strong("temporal"),
                                                                      value = FALSE),
@@ -85,7 +82,7 @@ navbarPage("Epipoi", id="nav",
                                                                         absolutePanel(id = "Histogram1", class = "panel panel-default", fixed = TRUE,
                                                                                       draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,
                                                                                       width = 600, height = "auto",
-                                                                                      h4("Filters:")
+                                                                                      plotOutput("plot")
                                                                         )),
                                                       
                                                        conditionalPanel(condition = "input.disperson1 == true && input.compareHist1 == false",
@@ -104,38 +101,25 @@ navbarPage("Epipoi", id="nav",
                                                                         )),
                                                        actionButton("show", "Show Data Table")
                                                        ),
-                                                      conditionalPanel(condition = "input.compareFilters == true",
+                                                    conditionalPanel(condition = "input.compareFilters == true",
                                                        # Download country mappings
                                                        h4("Filters:"),
-                                                       selectInput("age1","Age 1", c("All ages"="", "less 1 year" = "less 1 year","01-04" = "01-04","05-09" = "05-09","10-14" = "10-14","15-19" = "15-19","20-29" = "20-29",
-                                                                                  "30-39" = "30-39","40-49" = "40-49","50-59" = "50-59","60-69" = "60-69","70-79" = "70-79","80 and plus" = "80 and plus"), multiple=TRUE),
+                                                       selectInput("age1","Age", c("All ages"="", "less 1 year" = "less 1 year","01-04" = "01-04","05-09" = "05-09","10-14" = "10-14","15-19" = "15-19","20-29" = "20-29",
+                                                                                  "30-39" = "30-39","40-49" = "40-49","50-59" = "50-59","60-69" = "60-69","70-79" = "70-79","80 and plus" = "80 and plus"), multiple=FALSE),
+                                                       selectInput("age2","Age", c("All ages"="", "less 1 year" = "less 1 year","01-04" = "01-04","05-09" = "05-09","10-14" = "10-14","15-19" = "15-19","20-29" = "20-29",
+                                                                                  "30-39" = "30-39","40-49" = "40-49","50-59" = "50-59","60-69" = "60-69","70-79" = "70-79","80 and plus" = "80 and plus"), multiple=FALSE),
                                                        
-                                                       selectInput("age2","Age 2", c("All ages"="", "less 1 year" = "less 1 year","01-04" = "01-04","05-09" = "05-09","10-14" = "10-14","15-19" = "15-19","20-29" = "20-29",
-                                                                                  "30-39" = "30-39","40-49" = "40-49","50-59" = "50-59","60-69" = "60-69","70-79" = "70-79","80 and plus" = "80 and plus"), multiple=TRUE),
-                                                       selectInput("month","Month", c("All months"="", "January" = "1","February" = "2","March" = "3","April" = "4","May" = "5","June" = "6",
+                                                       selectInput("month2","Month", c("All months"="", "January" = "1","February" = "2","March" = "3","April" = "4","May" = "5","June" = "6",
                                                                                       "July" = "7","August" = "8","September" = "9","October" = "10","November" = "11","December" = "12"), multiple=TRUE),
                                                        
-                                                       selectInput("years","Years", c("All years"="", "2000"="2000","2001"="2001","2002"="2002","2003"="2003","2004"="2004","2005"="2005",
+                                                       selectInput("years2","Years", c("All years"="", "2000"="2000","2001"="2001","2002"="2002","2003"="2003","2004"="2004","2005"="2005",
                                                                                       "2006"="2006","2007"="2007","2008"="2008","2009"="2009","2010"="2010","2011"="2011","2012"="2012","2013"="2013"), multiple=TRUE),
-                                                       selectInput("region","Region", c("All region"="", "RIO GRANDE DO SUL" = "RIO GRANDE DO SUL","SANTA CATARINA" = "SANTA CATARINA","PARANÁ" = "PARANÁ","SÃO PAULO" = "SÃO PAULO",
-                                                                                        "RIO DE JANEIRO" = "RIO DE JANEIRO","ESPÍRITO SANTO" = "ESPÍRITO SANTO","MINAS GERAIS" = "MINAS GERAIS","MATO GROSSO DO SUL" = "MATO GROSSO DO SUL",
-                                                                                        "GOIÁS" = "GOIÁS","DISTRITO FEDERAL" = "DISTRITO FEDERAL","MATO GROSSO" = "MATO GROSSO","BAHIA" = "BAHIA","SERGIPE"="SERGIPE","ALAGOAS"="ALAGOAS",
-                                                                                        "PERNAMBUCO"="PERNAMBUCO","PARAÍBA"="PARAÍBA","RIO GRANDE DO NORTE"="RIO GRANDE DO NORTE","PIAUÍ"="PIAUÍ","CEARÁ"="CEARÁ","MARANHÃO"="MARANHÃO",
-                                                                                        "TOCANTINS"="TOCANTINS","ACRE"="ACRE","RONDÔNIA"="RONDÔNIA","AMAZONAS"="AMAZONAS","PARÁ"="PARÁ","AMAPÁ"="AMAPÁ","RORAIMA"="RORAIMA"), multiple=TRUE),
-                                                       actionButton("show2", "Show Data Table"),
-                                                       checkboxInput(inputId = "compareHist",
-                                                                     label = strong("temporal"),
-                                                                     value = FALSE),
-                                                       conditionalPanel(condition = "input.compareHist == true",
-                                                                        # Download country mappings
-                                                                        absolutePanel(id = "Histogram", class = "panel panel-default", fixed = TRUE,
-                                                                                      draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,
-                                                                                      width = 600, height = "auto",
-                                                                        h4("Filters:")
-                                                                        )
-                                                                       
+                                                       #selectInput("country2","Country", c("All countries"="",structure(countries$Country, names=countries$Country)), multiple=FALSE),
+                                                       #selectInput("regions","Regions", c("All regions"="",structure(region, names=region)), multiple=TRUE),
                                                        
-                                                       )
+                                                      # htmlOutput("selector2"),
+                                                      
+                                                       actionButton("show2", "Show Comparative Data Table")
                                                        )
                                       
                                       
