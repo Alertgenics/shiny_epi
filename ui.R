@@ -77,22 +77,33 @@ navbarPage("Epipoi", id="nav",
                                                        checkboxInput(inputId = "disperson1",
                                                                      label = strong("Disperson map"),
                                                                      value = FALSE),
-                                                       conditionalPanel(condition = "input.compareHist1 == true && input.disperson1 == false",
+                                                       checkboxInput(inputId = "decomposition",
+                                                                     label = strong("Decomposition of additive time series"),
+                                                                     value = FALSE),
+                                                       conditionalPanel(condition = "input.compareHist1 == true && input.disperson1 == false && input.decomposition == false",
                                                                         # Download country mappings
                                                                         absolutePanel(id = "Histogram1", class = "panel panel-default", fixed = TRUE,
                                                                                       draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,
                                                                                       width = 600, height = "auto",
                                                                                       plotOutput("plot")
+                                                                                      
                                                                         )),
                                                       
-                                                       conditionalPanel(condition = "input.disperson1 == true && input.compareHist1 == false",
+                                                       conditionalPanel(condition = "input.disperson1 == true && input.compareHist1 == false && input.decomposition == false",
                                                                         # Download country mappings
                                                                         absolutePanel(id = "Dispersion", class = "panel panel-default", fixed = TRUE,
                                                                                       draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,
                                                                                       width = 600, height = "auto",
-                                                                                      h4("Disperson:")
+                                                                                      plotOutput("autocorrelacion")
                                                                         )),
-                                                       conditionalPanel(condition = "input.disperson1 == true && input.compareHist1 == true",
+                                                       conditionalPanel(condition = "input.disperson1 == false && input.compareHist1 == false && input.decomposition == true",
+                                                                        # Download country mappings
+                                                                        absolutePanel(id = "Dispersion", class = "panel panel-default", fixed = TRUE,
+                                                                                      draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,
+                                                                                      width = 600, height = "auto",
+                                                                                      plotOutput("decomposition")
+                                                                        )),
+                                                       conditionalPanel(condition = "input.disperson1 == true && input.compareHist1 == true && input.decomposition == true",
                                                                         # Download country mappings
                                                                         absolutePanel(id = "Dispersion", class = "panel panel-default", fixed = TRUE,
                                                                                       draggable = TRUE, top = "auto", left = 20, right = "auto", bottom = 20,

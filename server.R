@@ -27,7 +27,7 @@ function(input, output) {
             urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
             attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
           ) %>%
-          setView(lng = -93.85, lat = 37.45, zoom = 2)
+          setView(lng = 00.00, lat = 00.00, zoom = 2)
       }else{
       countries <- read_excel("data/countries.xls",col_names = TRUE)
       lati <- countries$Latitude[countries$Country == pais]
@@ -37,7 +37,7 @@ function(input, output) {
         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%
-      setView(lng = long, lat = lati, zoom = 5)
+      setView(lng = long, lat = lati, zoom = 6)
       }
     }else{
       
@@ -46,7 +46,7 @@ function(input, output) {
           urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
           attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
         ) %>%
-        setView(lng = -93.85, lat = 37.45, zoom = 2)
+        setView(lng = 0, lat = 0, zoom = 2)
     }
     
   })
@@ -133,14 +133,15 @@ function(input, output) {
   output$plot<- renderPlot({
     inFile <- input$file
     region1 <- input$region1
-      if(!is.null(region1)){
-        file.rename(inFile$datapath,paste(inFile$datapath, ".xls", sep=""))
-        table <- read_excel_selectedSheet(paste(inFile$datapath, ".xls", sep=""))
-        x<- table %>% select(region1)
-        x.ts <- ts(x,start = c(1998,1), frequency = 12 )
+    if(!is.null(region1)){
+      file.rename(inFile$datapath,paste(inFile$datapath, ".xls", sep=""))
+      table <- read_excel_selectedSheet(paste(inFile$datapath, ".xls", sep=""))
+      x<- table %>% select(region1)
+      x.ts <- ts(x,start = c(1998,1), frequency = 12 )
         plot(x.ts, plot.type = "single", col=sample(rainbow(20)))
-        legend(x = 1,y =  100, legend=region1,
-               col=1:20)
+        legend(x = 1,y =  100, legend=region1,col=1:20)
+        #descomp2=stl(x.ts,s.window="periodic")
+        #str(descomp2)
       }else{
         file.rename(inFile$datapath,paste(inFile$datapath, ".xls", sep=""))
         table <- read_excel_selectedSheet(paste(inFile$datapath, ".xls", sep=""))
@@ -150,5 +151,37 @@ function(input, output) {
       }
 
   })
+ output$autocorrelacion <- renderPlot({
+   inFile <- input$file
+   region1 <- input$region1
+   if(!is.null(region1)){
+     file.rename(inFile$datapath,paste(inFile$datapath, ".xls", sep=""))
+     table <- read_excel_selectedSheet(paste(inFile$datapath, ".xls", sep=""))
+     x<- table %>% select(region1)
+     x.ts <- ts(x,start = c(1998,1), frequency = 12 )
+     acf(x.ts) #autocorrelacion
+     #lag.plot(x.ts, main="dfsd") #nube de puntos
+     #Descomposición de una serie temporal
+     #desc <- decompose(x.ts)
+     #plot(desc)
+     
+   }
+ })
+ output$decomposition <- renderPlot({
+   inFile <- input$file
+   region1 <- input$region1
+   if(!is.null(region1)){
+     file.rename(inFile$datapath,paste(inFile$datapath, ".xls", sep=""))
+     table <- read_excel_selectedSheet(paste(inFile$datapath, ".xls", sep=""))
+     x<- table %>% select(region1)
+     x.ts <- ts(x,start = c(1998,1), frequency = 12 )
+     #acf(x.ts) #autocorrelacion
+     #lag.plot(x.ts, main="dfsd") #nube de puntos
+     #Descomposición de una serie temporal
+     desc <- decompose(x.ts)
+     plot(desc)
+     
+   }
+ })
   
 }
